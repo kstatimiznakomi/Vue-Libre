@@ -10,7 +10,6 @@ import {useRouter} from "vue-router";
 var authors = ref();
 var genres = ref();
 var publishers = ref();
-var isSearchButtonAvailable = ref(false);
 const router = useRouter();
 
 var selectedCriteria = ref({
@@ -41,8 +40,6 @@ async function setCriteria() {
   });
   let queryParams = decodeURIComponent(urlParams.toString());
 
-  // await axios.get(`http://localhost:${import.meta.env.VITE_NEST_BACKEND_PORT}${import.meta.env.VITE_NEST_BACKEND_API}/search?${queryParams}`);
-
   await router.push(`/search?${queryParams}`);
 }
 
@@ -54,7 +51,7 @@ async function setCriteria() {
       <div id='criteria'
            class="flex align-content-stretch gap-2 justify-between">
         <select v-model="selectedCriteria.authorId"
-                class="border-solid border rounded-lg outline-none h-full w-full rounded-md border border-input bg-transparent px-3 py-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
+                class="border-solid border rounded-lg outline-none h-full w-full rounded-md border border-input bg-transparent px-4 py-4 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
           <option value="0">Выберите автора</option>
           <option v-for="author of authors" :value="author.id">
             {{ author.authorLastName }} {{ author.authorName }}
@@ -62,7 +59,7 @@ async function setCriteria() {
         </select>
         <select
             v-model="selectedCriteria.genreId"
-            class="border-solid border rounded-lg outline-none h-full w-full rounded-md border border-input bg-transparent px-3 py-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
+            class="border-solid border rounded-lg outline-none h-full w-full rounded-md border border-input bg-transparent px-4 py-4 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
           <option value="0">Выберите жанр</option>
           <option v-for="genre of genres" :value="genre.id">
             {{ genre.genre_name }}
@@ -70,7 +67,7 @@ async function setCriteria() {
         </select>
         <select
             v-model="selectedCriteria.publisherId"
-            class="border-solid border rounded-lg outline-none h-full w-full rounded-md border border-input bg-transparent px-3 py-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
+            class="border-solid border rounded-lg outline-none h-full w-full rounded-md border border-input bg-transparent px-3 py-4 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
           <option value="0">Выберите издателя</option>
           <option v-for="publisher of publishers" :value="publisher.id">
             {{ publisher.publisher_name }}
@@ -79,7 +76,7 @@ async function setCriteria() {
 
         <Input
             v-model="selectedCriteria.publicDate"
-            type='number' class="min-w-[200px] h-full py-3"
+            type='number' class="min-w-[200px] h-full py-4"
             placeholder="Введите дату выпуска"
         />
         <Input
@@ -89,10 +86,10 @@ async function setCriteria() {
       <div class="search mt-3 flex w-full justify-between items-center relative">
         <Input
             v-model="selectedCriteria.bookName"
-            class="search-input criteriaSelect"
+            class="search-input py-4 h-full criteriaSelect"
             placeholder="Введите название книги"/>
-        <Button @click="setCriteria" class="absolute right-0">
-          <Search/>
+        <Button @click="setCriteria" class="absolute bg-transparent rounded-full right-3">
+          <Search class="color-black"/>
         </Button>
       </div>
     </div>

@@ -23,7 +23,7 @@ defineProps<{
 
 <template>
   <li @click="visibleInfo = !visibleInfo"
-      class="self-center book items-center max-h-[342] p-3 bg-[#ecd582] min-w-[501px] rounded-lg transition-all">
+      class="self-center book items-center max-h-[342px] p-3 bg-[#ecd582] min-w-[501px] rounded-lg transition-all">
     <div class="items-center justify-center flex w-full">
       <div class="w-full relative">
         <div @click="favourite(id)"

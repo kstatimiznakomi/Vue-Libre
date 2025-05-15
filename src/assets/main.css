@@ -6,7 +6,6 @@
 @tailwind utilities;
 
 #app {
-
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
@@ -71,6 +70,13 @@
     }
 }
 
+.color-white {
+    color: white;
+}
+
+.color-black {
+    color: black;
+}
 
 @layer base {
     * {
