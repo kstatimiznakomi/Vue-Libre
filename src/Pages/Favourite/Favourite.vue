@@ -17,14 +17,16 @@ import {Books} from "@/types/types";
 import {useFavouriteBooks} from "@/composable/useFavouriteBooks";
 import BooksList from "@/components/BooksList.vue";
 import Loader from "@/components/Loader/Loader.vue";
+import {useRoute} from "vue-router";
+import {useSearchParams} from "../../composable/useSearchParams";
 
 const {user} = useAuth();
 const favouriteBooks = ref<Books>([]);
 const error = ref();
+const route = useRoute();
 
 onMounted(async () => {
-  favouriteBooks.value = await useFavouriteBooks(user.value.id);
-  console.log(favouriteBooks.value.books);
-  console.log(typeof favouriteBooks.value.books);
+  const queryParams = useSearchParams(route.query);
+  favouriteBooks.value = await useFavouriteBooks(user.value.id, queryParams);
 })
 </script>

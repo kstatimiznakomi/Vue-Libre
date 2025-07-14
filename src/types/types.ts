@@ -34,12 +34,12 @@ export type ErrorType = {
 }
 
 export type SearchParams = {
-    bookName: string,
-    page: number,
-    authorId: number,
-    genreId: number,
-    publisherId: number,
-    publishDate: number,
+    bookName?: string,
+    page?: number,
+    authorId?: number,
+    genreId?: number,
+    publisherId?: number,
+    publishDate?: number,
 }
 
 export type Books = {
