@@ -12,7 +12,7 @@ function click() {
 </script>
 
 <template>
-  <button @click="click" class="to_order transition-all noselect font-bold text-xl">Заказать</button>
+  <button @click.stop="click" class="to_order transition-all noselect font-bold text-xl">Заказать</button>
 </template>
 
 <style scoped/>

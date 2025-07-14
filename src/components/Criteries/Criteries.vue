@@ -1,18 +1,33 @@
 <script lang="ts" setup>
 import axios from "axios"
 import {ref} from "vue";
-import Input from "../ui/input/Input.vue";
-import Button from "../ui/button/Button.vue";
-import {Search} from 'lucide-vue-next';
-import {Select,} from "../ui/select";
+import Input from "@/components/ui/input/Input.vue";
+import Button from "@/components/ui/button/Button.vue";
+import {Search, X} from 'lucide-vue-next';
+import {Select} from "@/components/ui/select";
 import {useRouter} from "vue-router";
+import {API} from "@/Router/Pages";
+import {ErrorType, SuggestedBook} from "@/types/types";
+import {useSearchParams} from "@/composable/useSearchParams";
+import {useDebouncer} from "@/composable/useDebouncer";
+import SearchPreview from "@/components/SearchPreview/SearchPreview.vue";
+import {useSearch} from "@/composable/useSearch";
+import {onClickOutside} from "@vueuse/core";
 
-var authors = ref();
-var genres = ref();
-var publishers = ref();
+
+const authors = ref();
+const genres = ref();
+const publishers = ref();
+const suggested = ref<SuggestedBook[] | ErrorType>([]);
+const showSuggested = ref(false);
 const router = useRouter();
+const searchContainer = ref<HTMLElement | null>(null);
 
-var selectedCriteria = ref({
+onClickOutside(searchContainer, () => {
+  showSuggested.value = false
+});
+
+const selectedCriteria = ref({
   authorId: '0',
   genreId: '0',
   publisherId: '0',
@@ -22,7 +37,7 @@ var selectedCriteria = ref({
 });
 
 async function getCriteria() {
-  await axios.get(`http://localhost:${import.meta.env.VITE_NEST_BACKEND_PORT}${import.meta.env.VITE_NEST_BACKEND_API}/criteria`)
+  await axios.get(API.CRITERIA_API)
       .then((res) => {
         authors.value = res.data.authors;
         genres.value = res.data.genres;
@@ -32,13 +47,17 @@ async function getCriteria() {
 
 getCriteria();
 
-async function setCriteria() {
-  var urlParams = new URLSearchParams();
-  Object.entries(selectedCriteria.value).forEach((criteria) => {
-    if (criteria[1] !== '' && criteria[1] !== '0') urlParams.set(criteria[0], criteria[1]);
-    else urlParams.delete(criteria[0]);
-  });
-  let queryParams = decodeURIComponent(urlParams.toString());
+const debouncedSuggested = useDebouncer(async () => {
+  const queryParams = useSearchParams(selectedCriteria.value);
+  if (selectedCriteria.value.bookName.length) {
+    const books = await useSearch(queryParams);
+
+    suggested.value = books.books ? books.books : books;
+  }
+});
+
+async function search() {
+  const queryParams = useSearchParams(selectedCriteria.value);
 
   await router.push(`/search?${queryParams}`);
 }
@@ -47,9 +66,8 @@ async function setCriteria() {
 
 <template>
   <section class="flex justify-between mb-3">
-    <div class="criteria w-full combo flex-wrap container ">
-      <div id='criteria'
-           class="flex align-content-stretch gap-2 justify-between">
+    <div class="criteria w-full combo min-w-[509px]">
+      <div class="flex flex-col md:flex-row gap-2 align-content-stretch justify-between">
         <select v-model="selectedCriteria.authorId"
                 class="border-solid border rounded-lg outline-none h-full w-full rounded-md border border-input bg-transparent px-4 py-4 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
           <option value="0">Выберите автора</option>
@@ -83,14 +101,35 @@ async function setCriteria() {
             type='hidden' value='1' name='page' class='criteriaSelect h-full py-3'
         />
       </div>
-      <div class="search mt-3 flex w-full justify-between items-center relative">
-        <Input
-            v-model="selectedCriteria.bookName"
-            class="search-input py-4 h-full criteriaSelect"
-            placeholder="Введите название книги"/>
-        <Button @click="setCriteria" class="absolute bg-transparent rounded-full right-3">
-          <Search class="color-black"/>
-        </Button>
+      <div ref="searchContainer" class="search mt-3 flex flex-col items-center relative">
+        <div class="flex w-full items-center">
+          <Input @input="debouncedSuggested" @focus="showSuggested = true"
+                 v-model="selectedCriteria.bookName"
+                 class="search-input py-4 h-full criteriaSelect"
+                 placeholder="Введите название книги"/>
+          <button v-if="selectedCriteria.bookName" @click="selectedCriteria.bookName = ''"
+                  class="absolute bg-transparent rounded-full right-[45px]">
+            <X class="opacity-50 hover:opacity-100 transition-all duration-200"/>
+          </button>
+          <button @click="search"
+                  class="absolute bg-transparent rounded-full transition-all duration-200 opacity-50 hover:opacity-100 right-3">
+            <Search class="color-black"/>
+          </button>
+        </div>
+        <Transition
+            enter-active-class="transition-opacity duration-100"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition-opacity duration-100"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+        >
+          <div class="w-full absolute bg-[#ffffff] z-[999] top-12 transition-all border border-solid p-3 rounded-b-lg"
+               v-if="selectedCriteria.bookName.length && suggested.length && showSuggested">
+            <SearchPreview v-for="suggest in suggested"
+                           :suggest="suggest.bookName" :id="suggest.id"/>
+          </div>
+        </Transition>
       </div>
     </div>
   </section>

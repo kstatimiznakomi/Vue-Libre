@@ -22,5 +22,7 @@
   &:hover {
     text-decoration: none;
     background-color: #ffcb79;
+    transition: all;
+    transition-duration: 200ms;
   }
 }

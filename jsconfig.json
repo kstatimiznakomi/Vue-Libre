@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2017",
     "module": "esnext",
     "baseUrl": "./",
     "moduleResolution": "node",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
     "lib": [
       "esnext",
@@ -13,6 +15,10 @@
       "dom.iterable",
       "scripthost"
     ],
-    "exclude": ["node_modules", "dist"]
+    "strict": true,
+    "exclude": [
+      "node_modules",
+      "dist"
+    ]
   }
 }

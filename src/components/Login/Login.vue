@@ -1,60 +1,54 @@
 <template>
-  <div class="flex justify-center">
+  <UserForm>
     <Form
-        class="flex flex-col max-w-[800px] w-full border border-solid p-6 rounded-lg"
-        @submit="login">
+        class="flex flex-col max-w-[800px] w-full border border-solid p-7 rounded-lg"
+        @submit="loginFn">
       <div class="mb-3">
         <span class="text-2xl">Вход в аккаунт</span>
       </div>
       <div class="gap-3 flex flex-col h-full">
-        <Input v-model.trim="values.username" autocomplete="" v-model="form.username"
-               required class="w-full p-3 h-full"
+        <Input v-model.trim="values.username" autocomplete
+               required class="w-full p-5 h-full"
                placeholder="Введите имя пользователя"/>
         <FormError v-for="e in errors.username"
                    :key="e.errorCode"
-                   :errorMessage="errors.username[0].message"/>
-        <Input v-model.trim="values.password" autocomplete="" v-model="form.password"
+                   :errorMessage="e.message"/>
+        <Input v-model.trim="values.password" autocomplete
                type="password" required
-               class="w-full h-full p-3"
+               class="w-full h-full p-5"
                placeholder="Введите пароль"/>
         <FormError v-for="e in errors.password"
                    :key="e.errorCode"
-                   :errorMessage="errors.password[0].message"/>
-        <Input v-model.trim="values.verifyPassword" autocomplete=""
-               v-model="form.verifyPassword" type="password"
+                   :errorMessage="e.message"/>
+        <Input v-model.trim="values.verifyPassword" autocomplete
+               type="password"
                required
-               class="w-full h-full p-3"
+               class="w-full h-full p-5"
                placeholder="Введите подтверждение пароля"/>
         <FormError v-for="e in errors.verifyPassword"
                    :key="e.errorCode"
-                   :errorMessage="errors.verifyPassword[0].message"/>
+                   :errorMessage="e.message"/>
         <Button class="w-full text-2lg">Войти</Button>
       </div>
     </Form>
-  </div>
+  </UserForm>
 </template>
 
 <script setup lang="ts">
 import Input from "../ui/input/Input.vue";
 import {Form} from "vee-validate";
 import Button from "../ui/button/Button.vue";
-import {ref} from "vue";
-import {loginUserSchema} from "../../ZodSchemas/ZodSchemas";
+import {loginUserSchema} from "@/ZodSchemas/ZodSchemas";
 import {useZodValidator} from 'vue-use-zod-validator'
-import axios from "axios";
 import FormError from "../FormError/FormError.vue";
+import UserForm from "@/components/Form/UserForm.vue";
+import {UserLogin} from "@/types/types.ts";
+import {useRouter} from "vue-router";
+import {useAuth} from "@/composable/useAuth";
 
-type UserLogin = {
-  username: '',
-  password: '',
-  verifyPassword: '',
-}
+const router = useRouter();
 
-const form = ref<UserLogin>({
-  username: '',
-  password: '',
-  verifyPassword: '',
-})
+const {login} = useAuth();
 
 const {
   values,
@@ -64,22 +58,17 @@ const {
   username: '',
   password: '',
   verifyPassword: '',
-})
+});
 
-async function login() {
+async function loginFn() {
   const result = await validate();
   if (result.isValid) {
-    await axios.post(
-        `http://localhost:${import.meta.env.VITE_NEST_BACKEND_PORT}${import.meta.env.VITE_NEST_BACKEND_API}/auth`,
-        values.value, {
-          withCredentials: true,
-          
-        }
-    ).then((res) => {
-      console.log(res);
-    }).catch((e) => {
+    try {
+      await login(values.value);
+      await router.replace('/');
+    } catch (e) {
       console.log(e);
-    });
+    }
   } else console.log(errors.value);
 }
 </script>

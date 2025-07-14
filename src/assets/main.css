@@ -78,6 +78,10 @@
     color: black;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
 @layer base {
     * {
         @apply border-border;

@@ -1,7 +1,8 @@
 <template>
   <div>
     <span class="bg-[#e8d17d] px-5 py-3 rounded-full select-none items-center flex gap-1">{{ criteria[1] }}
-      <button @click="removeFilter" class="rounded-full hover:bg-[#baa868] cursor-pointer">
+      <button @click="removeFilter"
+              class="rounded-full transition-colors duration-100 hover:bg-[#baa868] cursor-pointer">
         <X class="p-1" title="Убрать фильтр"/>
       </button>
       </span>
