@@ -13,10 +13,8 @@ export function useAuth() {
         await store.dispatch('auth/logout');
     };
 
-
     const user = computed(() => store.state.auth.user);
     const isSigned = computed(() => store.state.auth.isSigned);
-
 
     return {
         user,

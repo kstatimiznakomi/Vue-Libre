@@ -34,7 +34,8 @@ const PagesList = defineAsyncComponent({
                 :id="book.id"
                 :img="book.poster" :description="book.description" :favouriteBooks="favouriteBooks"/>
     </ul>
-    <PagesList v-if="!error || books" :maxPage="lastPage" :allPages="allPages" :startPage="startPage" :page="curPage"/>
+    <PagesList v-if="!error || books.length" :maxPage="lastPage" :allPages="allPages" :startPage="startPage"
+               :page="curPage"/>
   </div>
 </template>
 

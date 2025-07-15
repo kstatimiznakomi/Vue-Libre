@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {defineProps, ref, watchEffect} from "vue";
-import {RouterLink} from "vue-router";
+import {RouterLink, useRoute, useRouter} from "vue-router";
 import {Ellipsis} from 'lucide-vue-next';
+import FirstPage from "./FirstPage.vue";
+import {useSearchParams} from "../../composable/useSearchParams";
 
 const {startPage, page, maxPage, allPages} = defineProps<{
   startPage: Number,
@@ -13,7 +15,29 @@ const {startPage, page, maxPage, allPages} = defineProps<{
 const startPageRef = ref(startPage);
 const pageRef = ref(page);
 const lastPageRef = ref(maxPage);
-var pages = ref([]);
+const pages = ref([]);
+const route = useRoute();
+const router = useRouter();
+
+function changePageQuery(page: number) {
+  return useSearchParams({
+    query: {
+      ...route.query,
+      page: page.toString(),
+    },
+  }.query);
+}
+
+function changePageParams(page: number) {
+  return {
+    params: {
+      ...route.params,
+      page: page.toString(),
+    },
+  }.params;
+}
+
+console.log(route);
 
 watchEffect(async () => {
   pages.value = [];
@@ -24,23 +48,27 @@ watchEffect(async () => {
   for (let i = startPageRef.value; i <= lastPageRef.value; i++) {
     pages.value.push(i);
   }
-}, [startPage, page, maxPage])
+}, [startPage, page, maxPage]);
 
+function existParams(curPage) {
+  return Object.keys(route.params).length ? changePageParams(curPage).page : '';
+}
+
+function existQuery(curPage) {
+  return Object.keys(route.query).length ? `?${changePageQuery(curPage)}` : '';
+}
 
 </script>
 
 <template>
   <div class="gap-2 my-6 min-w-[509px] flex items-center flex-wrap justify-center">
     <div class="flex gap-3">
-      <div class="flex gap-3" v-if="startPage > 1">
-        <RouterLink :to="`/catalog/1`" class="p-3 bg-[#e3e3e3] rounded-lg">Первая</RouterLink>
-        <div class="h-full flex p-3 items-center justify-center">
-          <Ellipsis/>
-        </div>
-      </div>
-
+      <FirstPage v-if="startPage > 1"/>
       <div class="flex" v-for="curPage of pages">
-        <RouterLink :to="`/catalog/${curPage}`" v-if="curPage !== page" class="p-3 bg-[#e3e3e3] rounded-lg">{{
+        <RouterLink
+            :to="`${existParams(curPage)}${existQuery(curPage)}`"
+            v-if="curPage !== page"
+            class="p-3 bg-[#e3e3e3] rounded-lg">{{
             curPage
           }}
         </RouterLink>

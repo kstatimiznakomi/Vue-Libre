@@ -4,12 +4,12 @@ import '@/assets/main.css';
 import {routes} from "@/Router/router";
 import {createRouter, createWebHistory} from 'vue-router';
 import {useCookies} from "vue3-cookies";
-import {updateTokens} from "@/composable/useRefreshToken";
-import {useCheckAuth} from "@/composable/useCheckAuth";
-import {jwtDecode} from "jwt-decode";
 import {store} from '@/store/index.ts'
-import {AuthedState} from "@/types/types";
 import {useAuth} from "./composable/useAuth";
+import {AuthedState} from "./types/types";
+import {useCheckAuth} from "./composable/useCheckAuth";
+import {updateTokens} from "./composable/useRefreshToken";
+import {jwtDecode} from "jwt-decode";
 
 const {cookies} = useCookies();
 
@@ -18,23 +18,27 @@ const router = createRouter({
     routes,
 });
 
+async function checkAndSetAuth() {
+    const authed: AuthedState = await useCheckAuth();
+    if (authed.isSigned) {
+        const {accessToken} = await updateTokens();
+        store.commit('auth/SET_AUTH', {
+            isSigned: authed.isSigned,
+            user: jwtDecode(accessToken)
+        });
+    } else {
+        store.commit('auth/SET_AUTH', {
+            isSigned: authed.isSigned,
+            user: {}
+        });
+    }
+}
+
 async function initAuth() {
     const jwt = cookies.get('accessToken');
 
     if (!jwt) {
-        const authed: AuthedState = await useCheckAuth();
-        if (authed.isSigned) {
-            const {accessToken} = await updateTokens();
-            store.commit('auth/SET_AUTH', {
-                isSigned: authed.isSigned,
-                user: jwtDecode(accessToken)
-            });
-        } else {
-            store.commit('auth/SET_AUTH', {
-                isSigned: authed.isSigned,
-                user: {}
-            });
-        }
+        await checkAndSetAuth();
     }
 }
 
@@ -59,4 +63,5 @@ router.beforeEach(async (to, from, next) => {
 createApp(App)
     .use(store)
     .use(router)
-    .mount('#app')
+    .mount('#app');
+
