@@ -20,24 +20,26 @@ const route = useRoute();
 const router = useRouter();
 
 function changePageQuery(page: number) {
-  return useSearchParams({
-    query: {
-      ...route.query,
-      page: page.toString(),
-    },
-  }.query);
+  if (Object.keys(route.query).length)
+    return `${route.path}?${useSearchParams({
+      query: {
+        ...route.query,
+        page: page.toString(),
+      },
+    }.query)}`;
+  return useSearchParams(route.query);
 }
 
 function changePageParams(page: number) {
-  return {
-    params: {
-      ...route.params,
-      page: page.toString(),
-    },
-  }.params;
+  if (Object.keys(route.params).length)
+    return {
+      params: {
+        ...route.params,
+        page: page.toString(),
+      },
+    }.params.page;
+  return useSearchParams(route.params);
 }
-
-console.log(route);
 
 watchEffect(async () => {
   pages.value = [];
@@ -50,14 +52,6 @@ watchEffect(async () => {
   }
 }, [startPage, page, maxPage]);
 
-function existParams(curPage) {
-  return Object.keys(route.params).length ? changePageParams(curPage).page : '';
-}
-
-function existQuery(curPage) {
-  return Object.keys(route.query).length ? `?${changePageQuery(curPage)}` : '';
-}
-
 </script>
 
 <template>
@@ -66,7 +60,7 @@ function existQuery(curPage) {
       <FirstPage v-if="startPage > 1"/>
       <div class="flex" v-for="curPage of pages">
         <RouterLink
-            :to="`${existParams(curPage)}${existQuery(curPage)}`"
+            :to="`${changePageParams(curPage)}${changePageQuery(curPage)}`"
             v-if="curPage !== page"
             class="p-3 bg-[#e3e3e3] rounded-lg">{{
             curPage

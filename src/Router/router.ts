@@ -21,17 +21,24 @@ export const routes = [
                 meta: {requiresAuth: false},
             },
             {
-                path: '/catalog/:page',
+                path: PAGES.CATALOG,
                 component: BooksPage,
                 meta: {requiresAuth: false},
+                redirect: `${PAGES.CATALOG}/1`,
             },
             {
-                path: PAGES.CATALOG,
+                path: `${PAGES.CATALOG}/:page`,
                 component: BooksPage,
                 meta: {requiresAuth: false},
             },
             {
                 path: PAGES.FAVOURITE,
+                component: Favourite,
+                meta: {requiresAuth: false},
+                redirect: `${PAGES.FAVOURITE}/1`,
+            },
+            {
+                path: `${PAGES.FAVOURITE}/:page`,
                 component: Favourite,
                 meta: {requiresAuth: false},
             },

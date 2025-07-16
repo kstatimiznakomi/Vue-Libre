@@ -14,7 +14,6 @@ import SearchPreview from "@/components/SearchPreview/SearchPreview.vue";
 import {useSearch} from "@/composable/useSearch";
 import {onClickOutside} from "@vueuse/core";
 
-
 const authors = ref();
 const genres = ref();
 const publishers = ref();

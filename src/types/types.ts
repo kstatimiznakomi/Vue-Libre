@@ -44,9 +44,17 @@ export type SearchParams = {
 
 export type Books = {
     books: BookType[],
+    allPages: number,
     startPage: number,
     lastPage: number,
     page: number,
+}
+
+export type ErrorBookResponse = {
+    response: string,
+    status: number,
+    message: string,
+    name: string,
 }
 
 export type BookType = {

@@ -2,8 +2,7 @@
   <Criteries/>
   <CriteriaList v-if="route.path.includes('/search')"/>
   <Suspense>
-    <BooksList :error="error" :books="books" :startPage="startPage" :curPage="curPage" :allPages="allPages"
-               :lastPage="lastPage"/>
+    <BooksList v-if="result" :result="result"/>
     <template #fallback>
       <Loader/>
     </template>
@@ -16,20 +15,14 @@ import Criteries from "@/components/Criteries/Criteries.vue";
 import {ref, watchEffect} from "vue";
 import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
-import {currentPage} from "@/constants/constants";
 import CriteriaList from "@/components/Criteries/CriteriaList/CriteriaList.vue";
 import Loader from "../../components/Loader/Loader.vue";
 import {API} from "../../Router/Pages";
+import {Books, ErrorBookResponse} from "../../types/types";
 
 const route = useRoute();
-const lastPage = ref();
-const startPage = ref();
-const allPages = ref();
-const books = ref([]);
-const error = ref();
+const result = ref<Books | ErrorBookResponse>();
 const router = useRouter();
-
-const curPage = ref(currentPage);
 
 watchEffect(() => {
   if (route.path.includes('/catalog')) {
@@ -47,29 +40,19 @@ async function getCatalog(page) {
     await axios.get(`${API.CATALOG_API}/${Math.max(1, Number(route.params.page))}`)
         .then((res) => {
           if (route.params.page <= res.data.allPages) {
-            curPage.value = res.data.page;
-            lastPage.value = res.data.lastPage;
-            startPage.value = res.data.startPage;
-            books.value = res.data.books;
-            allPages.value = res.data.allPages;
-          } else router.push(`/catalog/${res.data.allPages}`);
+            result.value = res.data;
+          } else router.push(`/catalog/${result.value.allPages}`);
         })
   }
 }
 
 async function getSearch() {
-  error.value = '';
   await axios.get(`${API.BASE_API}${route.fullPath}`)
       .then((res) => {
         if (res.data.status || !res.data) {
-          error.value = res.data.response;
-          books.value = [];
+          result.value = res.data;
         } else {
-          curPage.value = res.data.page;
-          lastPage.value = res.data.lastPage;
-          startPage.value = res.data.startPage;
-          books.value = res.data.books;
-          allPages.value = res.data.allPages;
+          result.value = res.data;
         }
       })
 }
