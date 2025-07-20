@@ -1,20 +1,20 @@
 import {computed} from 'vue'
-import {useStore} from 'vuex'
 import {UserLogin} from "../types/types";
+import {useAuthPinia} from "../store/storeAuthPinia";
 
 export function useAuth() {
-    const store = useStore();
+    const storePinia = useAuthPinia();
 
     const login = async (values: UserLogin) => {
-        return await store.dispatch('auth/login', values);
+        return storePinia.login(values)
     };
 
     const logout = async () => {
-        await store.dispatch('auth/logout');
+        await storePinia.logout();
     };
 
-    const user = computed(() => store.state.auth.user);
-    const isSigned = computed(() => store.state.auth.isSigned);
+    const user = computed(() => storePinia.user);
+    const isSigned = computed(() => storePinia.isSigned);
 
     return {
         user,

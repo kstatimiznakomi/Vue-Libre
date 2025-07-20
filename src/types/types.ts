@@ -14,8 +14,8 @@ export type User = {
     verifyPassword: string,
 };
 
-type AuthedUser = {
-    id: number,
+export type AuthedUser = {
+    id: number | null,
     username: string,
 }
 
@@ -70,5 +70,5 @@ export type BookType = {
 
 export type AuthedState = {
     isSigned: boolean,
-    user: AuthedUser | null,
+    user: AuthedUser,
 }

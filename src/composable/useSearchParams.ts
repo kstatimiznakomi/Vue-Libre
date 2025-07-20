@@ -3,10 +3,11 @@ import {LocationQuery} from "vue-router";
 
 export function useSearchParams(selectedCriteria: SearchParams | LocationQuery) {
     const urlParams = new URLSearchParams();
-    Object.entries(selectedCriteria).forEach((criteria) => {
-        if (criteria[1] !== '' && criteria[1] !== '0') urlParams.set(criteria[0], criteria[1]);
-        else urlParams.delete(criteria[0]);
-    });
+    Object.entries(selectedCriteria).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && value !== '' && value !== '0') {
+            urlParams.append(key, value.toString());
+        }
+    })
 
-    return decodeURIComponent(urlParams.toString());
+    return urlParams.toString();
 }

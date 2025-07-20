@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.23",
     "@tailwindcss/cli": "^4.0.17",
     "@tailwindcss/postcss": "^4.0.17",
     "@vitejs/plugin-vue": "^5.2.3",
@@ -22,6 +23,8 @@
     "lucide-vue": "^0.487.0",
     "lucide-vue-next": "^0.525.0",
     "node": "^24.4.0",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.4.1",
     "reka-ui": "^2.2.0",
     "shadcn": "^2.4.0-canary.17",
     "tailwind-merge": "^3.1.0",

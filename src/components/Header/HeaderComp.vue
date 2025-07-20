@@ -7,7 +7,6 @@ import {useAuth} from "@/composable/useAuth";
 
 const router = useRouter();
 
-
 const {user, isSigned, logout} = useAuth();
 
 function logoutFun() {
@@ -50,7 +49,7 @@ function logoutFun() {
             <RouterLink to="/profile" class="link self-center justify-end">{{ user.username }}</RouterLink>
           </div>
           <div class="flex max-w-80">
-            <RouterLink to="/favourite" class="link self-center justify-end">Избранное</RouterLink>
+            <RouterLink to="/favourite?page=1" class="link self-center justify-end">Избранное</RouterLink>
           </div>
           <div class="flex md:text-center">
             <button @click="logoutFun" class='link w-full transition-all duration-200'>

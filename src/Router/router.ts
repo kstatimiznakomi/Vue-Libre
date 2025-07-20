@@ -32,24 +32,27 @@ export const routes = [
                 meta: {requiresAuth: false},
             },
             {
-                path: PAGES.FAVOURITE,
+                path: `${PAGES.FAVOURITE}`,
                 component: Favourite,
                 meta: {requiresAuth: false},
-                redirect: `${PAGES.FAVOURITE}/1`,
             },
             {
-                path: `${PAGES.FAVOURITE}/:page`,
-                component: Favourite,
-                meta: {requiresAuth: false},
+                path: `${PAGES.FAVOURITE}/:page(\\d+)`,
+                redirect: {
+                    path: `${PAGES.FAVOURITE}`,
+                    query: {page: '1'}
+                },
+            },
+            {
+                path: `${PAGES.FAVOURITE}`,
+                redirect: {
+                    path: `${PAGES.FAVOURITE}`,
+                    query: {page: '1'}
+                },
             },
             {
                 path: PAGES.ABOUT,
                 component: About,
-                meta: {requiresAuth: false},
-            },
-            {
-                path: PAGES.NOT_FOUND,
-                component: NotFoundPage,
                 meta: {requiresAuth: false},
             },
             {
@@ -69,6 +72,11 @@ export const routes = [
             }
         ]
 
+    },
+    {
+        path: PAGES.NOT_FOUND,
+        component: NotFoundPage,
+        meta: {requiresAuth: false},
     },
     {
         path: PAGES.LOGIN,
