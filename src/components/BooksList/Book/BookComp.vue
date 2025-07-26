@@ -15,9 +15,11 @@ import {useAddedFavourite} from "@/composable/useAddedFavourite";
 import {useRouter} from "vue-router";
 import {useAuth} from "@/composable/useAuth";
 import {useDebouncer} from "../../../composable/useDebouncer";
+import {useToastStore} from "../../../store/toast";
 
 const {user, isSigned} = useAuth();
 const router = useRouter();
+const toast = useToastStore();
 
 const {id, bookName, description, img, count, favouriteBooks} = defineProps<{
   id: Number,
@@ -30,6 +32,9 @@ const {id, bookName, description, img, count, favouriteBooks} = defineProps<{
 
 function favourite() {
   if (isSigned.value) {
+    toast.showToast(`${addedToFavourite.value
+        ? 'Книга убрана из избранного'
+        : 'Книга добавлена в избранное'}`);
     addedToFavourite.value = !addedToFavourite.value;
     debouncedFavourite();
   } else router.push('/login');

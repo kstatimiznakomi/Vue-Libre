@@ -1,9 +1,9 @@
 <template>
   <Transition
-      enter-active-class="transition-all duration-400"
+      enter-active-class="transition duration-300"
       enter-from-class="opacity-0"
       enter-to-class="opacity-100"
-      leave-active-class="transition-all duration-400"
+      leave-active-class="transition duration-200"
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
   >
@@ -11,9 +11,7 @@
             title="Наверх"
             @click="scrollToTop"
             class="left-[50px] p-5 bottom-[50px] rounded-full z-[999] fixed left-0 hover:bg-[#ffffff] bg-transparent bg-[#d9d9d9] opacity-50 transition-opacity hover:opacity-100 duration-400">
-      <div>
-        <ChevronUp/>
-      </div>
+      <ChevronUp/>
     </button>
   </Transition>
 </template>
