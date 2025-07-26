@@ -1,8 +1,4 @@
-export type UserLogin = {
-    username: string,
-    password: string,
-    verifyPassword: string,
-};
+export type UserLogin = Pick<User, 'username' | 'password' | 'verifyPassword'>;
 
 export type User = {
     firstname: string,
@@ -10,8 +6,19 @@ export type User = {
     surname: string,
     username: string,
     email: string,
+    phone: string,
     password: string,
     verifyPassword: string,
+};
+
+export const fieldMap = {
+    'Имя': 'firstname',
+    'Фамилия': 'lastname',
+    'Отчество': 'surname',
+    'Имя пользователя': 'username',
+    'Почта': 'email',
+    'Телефон': 'phone',
+    'Пароль': 'password',
 };
 
 export type AuthedUser = {

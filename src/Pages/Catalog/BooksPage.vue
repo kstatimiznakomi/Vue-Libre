@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import BooksList from "@/components/BooksList.vue";
+import BooksList from "@/components/BooksList/BooksList.vue";
 import Criteries from "@/components/Criteries/Criteries.vue";
 import {ref, watchEffect} from "vue";
 import axios from "axios";

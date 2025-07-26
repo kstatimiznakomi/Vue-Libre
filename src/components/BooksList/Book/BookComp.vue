@@ -7,14 +7,14 @@ import OpenButton from "@/components/OpenButton/OpenButton.vue";
 import BookInfo from "./BookInfo.vue";
 import ToOrderBtn from "./ToOrderBtn.vue";
 import {HeartMinus, HeartPlus} from 'lucide-vue-next';
-import Button from "../ui/button/Button.vue";
+import Button from "../../ui/button/Button.vue";
 import axios from "axios";
 import {API} from "@/Router/Pages";
 import {FavouriteBook} from "@/types/types";
 import {useAddedFavourite} from "@/composable/useAddedFavourite";
 import {useRouter} from "vue-router";
 import {useAuth} from "@/composable/useAuth";
-import {useDebouncer} from "../../composable/useDebouncer";
+import {useDebouncer} from "../../../composable/useDebouncer";
 
 const {user, isSigned} = useAuth();
 const router = useRouter();
@@ -93,6 +93,6 @@ const debouncedFavourite = useDebouncer(async () => {
 </template>
 
 <style scoped>
-@import "Book.module.scss";
+@import "@/components/BooksList/Book/book.module.scss";
 @import "@/assets/biblio.scss";
 </style>

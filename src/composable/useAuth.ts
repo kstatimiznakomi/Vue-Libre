@@ -1,5 +1,5 @@
 import {computed} from 'vue'
-import {UserLogin} from "../types/types";
+import {User, UserLogin} from "../types/types";
 import {useAuthPinia} from "../store/storeAuthPinia";
 
 export function useAuth() {
@@ -13,6 +13,10 @@ export function useAuth() {
         await storePinia.logout();
     };
 
+    const patch = async (values: User) => {
+        await storePinia.patch(values);
+    }
+
     const user = computed(() => storePinia.user);
     const isSigned = computed(() => storePinia.isSigned);
 
@@ -21,5 +25,6 @@ export function useAuth() {
         isSigned,
         login,
         logout,
+        patch
     };
 }

@@ -2,7 +2,7 @@
 import {defineProps, ref, watchEffect} from "vue";
 import {RouterLink, useRoute, useRouter} from "vue-router";
 import {Ellipsis} from 'lucide-vue-next';
-import FirstPage from "./FirstPage.vue";
+import FirstPage from "./FirstPage/FirstPage.vue";
 import {useSearchParams} from "../../composable/useSearchParams";
 
 const {startPage, page, maxPage, allPages} = defineProps<{

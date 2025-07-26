@@ -1,9 +1,7 @@
 <template>
   <div class="max-w-4xl mx-auto p-6">
     <div class="flex mb-2 p-2">
-      <button @click="router.back()">
-        <MoveLeft class="opacity-50 hover:opacity-100 transition-all duration-200"/>
-      </button>
+      <BackButton @click="router.back()"/>
     </div>
     <div class="flex flex-col h-[394px] sm:flex-row gap-6">
       <img
@@ -35,10 +33,10 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {MoveLeft} from 'lucide-vue-next';
 import {useRoute, useRouter} from "vue-router";
 import axios from "axios";
 import {API} from "../../Router/Pages";
+import BackButton from "../../components/BackButton/BackButton.vue";
 
 const book = ref({
   id: 0,

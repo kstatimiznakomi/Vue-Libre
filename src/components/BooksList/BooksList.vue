@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import BookComp from '@/components/Book/BookComp.vue';
+import BookComp from '@/components/BooksList/Book/BookComp.vue';
 import {defineAsyncComponent, defineProps} from "vue";
 import {useFavouriteBooks} from "@/composable/useFavouriteBooks";
-import {Books, ErrorBookResponse, FavouriteBook} from "../types/types";
-import {useAuth} from "../composable/useAuth";
+import {Books, ErrorBookResponse, FavouriteBook} from "../../types/types";
+import {useAuth} from "../../composable/useAuth";
 
 const {result} = defineProps<{
   result: Books | ErrorBookResponse,

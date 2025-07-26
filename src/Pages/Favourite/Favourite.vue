@@ -11,7 +11,7 @@
 import {useAuth} from "@/composable/useAuth";
 import {ref, watchEffect} from "vue";
 import {useFavouriteBooks} from "@/composable/useFavouriteBooks";
-import BooksList from "@/components/BooksList.vue";
+import BooksList from "@/components/BooksList/BooksList.vue";
 import Loader from "@/components/Loader/Loader.vue";
 import {Books, ErrorBookResponse} from "../../types/types";
 import {useRoute} from "vue-router";

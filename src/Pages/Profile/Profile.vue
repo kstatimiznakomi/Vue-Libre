@@ -1,34 +1,53 @@
 <template>
-  <div class="w-full mt-3 flex justify-center">
-    <div class="shadow-xl max-w-[500px] w-full rounded-lg">
-      <p class="text-2xl font-bold">Профиль</p>
-      <div v-for="item in user">
-        <UserInfoItem :itemName="item.value.field" :item="item.value.value"/>
-      </div>
-    </div>
-  </div>
+  <component
+      :is="editMode ? EditProfile : ProfileInfo"
+      :key="editMode"
+      :user="userInfo"
+      @changeMode="editMode ? modeChanged() : (editMode = true)"
+  />
+  <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+  >
+    <Success v-if="success" :message="'Данные успешно изменены!'"/>
+  </Transition>
 </template>
 
 <script setup lang="ts">
-
-import {jwtDecode} from "jwt-decode";
-import {useCookies} from "vue3-cookies";
-import {useGetUser} from "@/composable/useGetUser";
-import UserInfoItem from "@/components/UserInfoItem/UserInfoItem.vue";
 import {computed, onMounted, ref} from "vue";
+import ProfileInfo from "./components/ProfileInfo.vue";
+import EditProfile from "./components/EditProfile.vue";
+import {useGetUser} from "../../composable/useGetUser";
+import {useAuth} from "../../composable/useAuth";
+import Success from '../../components/Success/Success.vue'
 
-const {cookies} = useCookies();
-const payload = jwtDecode(cookies.get('accessToken'));
+const {user} = useAuth();
 
+const success = ref(false);
+
+const editMode = ref(false);
 onMounted(async () => {
-  userRaw.value = await useGetUser(payload.id);
-})
+  userRaw.value = await useGetUser(user.value.id);
+});
+
+async function modeChanged() {
+  editMode.value = false;
+  success.value = true;
+  userRaw.value = await useGetUser(user.value.id);
+  setTimeout(() => {
+    success.value = false;
+  }, 2000);
+}
 
 const userRaw = ref();
 
-const user = computed(() =>
+const userInfo = computed(() =>
     userRaw.value
         ? Object.entries(userRaw.value).map(([key, value]) => ({key, value}))
-        : []
+        : {}
 )
 </script>

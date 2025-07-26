@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import {defineEmits, defineProps} from "vue";
 import {cn} from '@/lib/utils';
-import {X} from 'lucide-vue-next';
-import Button from "../ui/button/Button.vue";
+import CloseButton from "../../CloseButton/CloseButton.vue";
 
 const emit = defineEmits(['close']);
 
@@ -32,11 +31,7 @@ defineProps<{
           </div>
           <div class='ml-3 justify-start flex flex-col '>
             <div class="flex justify-end">
-              <button @click="emit('close')"
-                      class="p-2 cursor-pointer rounded-full">
-                <X class="opacity-50 hover:opacity-100 transition-all duration-200"/>
-              </button>
-
+              <CloseButton @click="emit('close')"/>
             </div>
             <div class="flex">
               <h3 class="text-2xl text-black">{{ bookName }}</h3>
@@ -57,5 +52,5 @@ defineProps<{
 </template>
 
 <style>
-@import "Book.module.scss";
+@import "@/components/BooksList/Book/book.module.scss";
 </style>

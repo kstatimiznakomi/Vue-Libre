@@ -35,12 +35,12 @@
 </template>
 
 <script setup lang="ts">
-import Input from "../ui/input/Input.vue";
+import Input from "../../components/ui/input/Input.vue";
 import {Form} from "vee-validate";
-import Button from "../ui/button/Button.vue";
+import Button from "../../components/ui/button/Button.vue";
 import {loginUserSchema} from "@/ZodSchemas/ZodSchemas";
 import {useZodValidator} from 'vue-use-zod-validator'
-import FormError from "../FormError/FormError.vue";
+import FormError from "../../components/Form/FormError/FormError.vue";
 import UserForm from "@/components/Form/UserForm.vue";
 import {UserLogin} from "@/types/types.ts";
 import {useRouter} from "vue-router";

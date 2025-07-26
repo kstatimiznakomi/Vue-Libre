@@ -4,7 +4,7 @@ import {useCookies} from "vue3-cookies";
 import axios from "axios";
 import {updateTokens} from "../composable/useRefreshToken";
 import {API} from "../Router/Pages";
-import {AuthedState, AuthedUser, UserLogin} from "../types/types";
+import {AuthedState, AuthedUser, User, UserLogin} from "../types/types";
 
 const cookies = useCookies().cookies
 
@@ -45,6 +45,13 @@ export const useAuthPinia = defineStore('authPinia', {
             } catch (e) {
                 console.error("Login failed:", e);
                 throw e;
+            }
+        },
+        async patch(values: User) {
+            try {
+                return await axios.patch(API.PATCH_USER_API, values);
+            } catch (e) {
+                console.error('Не удалось обновить пользователя', e);
             }
         },
         async logout() {

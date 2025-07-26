@@ -14,9 +14,11 @@ export const PAGES = {
 const backendPort = import.meta.env.VITE_NEST_BACKEND_PORT;
 const backendApi = import.meta.env.VITE_NEST_BACKEND_API;
 
+
 export const API = {
     BASE_API: `http://localhost:${backendPort}${backendApi}`,
     AUTH_API: `http://localhost:${backendPort}${backendApi}/auth`,
+    PATCH_USER_API: `http://localhost:${backendPort}${backendApi}/user/edit`,
     LOGIN_API: `http://localhost:${backendPort}${backendApi}/login`,
     GET_USER_API: `http://localhost:${backendPort}${backendApi}/user`,
     CHECK_AUTH_API: `http://localhost:${backendPort}${backendApi}/checkAuth`,
