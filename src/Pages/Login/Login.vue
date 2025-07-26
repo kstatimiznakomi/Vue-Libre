@@ -45,8 +45,10 @@ import UserForm from "@/components/Form/UserForm.vue";
 import {UserLogin} from "@/types/types.ts";
 import {useRouter} from "vue-router";
 import {useAuth} from "@/composable/useAuth";
+import {useToastStore} from "../../store/toast";
 
 const router = useRouter();
+const toast = useToastStore();
 
 const {login} = useAuth();
 
@@ -65,6 +67,7 @@ async function loginFn() {
   if (result.isValid) {
     try {
       await login(values.value);
+      toast.showToast('Вход выполнен успешно!');
       await router.replace('/');
     } catch (e) {
       console.log(e);

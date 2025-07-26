@@ -78,6 +78,10 @@ import {User} from "@/types/types.ts";
 import axios from "axios";
 import {API} from "@/Router/Pages";
 import {ref} from "vue";
+import {useToastStore} from "../../store/toast";
+
+const toast = useToastStore();
+
 
 const form = ref<User>({
   username: '',
@@ -106,12 +110,13 @@ async function register() {
   const result = await validate();
   if (result.isValid) {
     try {
-      const res = await axios.post(
+      return await axios.post(
           API.REGISTER_API,
           values.value, {
             withCredentials: true,
           }
       ).then((res) => {
+        toast.showToast('Регистрация выполнена успешно!');
         console.log(res);
       })
           .catch((e) => {

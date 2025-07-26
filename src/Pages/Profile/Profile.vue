@@ -24,8 +24,10 @@ import EditProfile from "./components/EditProfile.vue";
 import {useGetUser} from "../../composable/useGetUser";
 import {useAuth} from "../../composable/useAuth";
 import Success from '../../components/Success/Success.vue'
+import {useToastStore} from "../../store/toast";
 
 const {user} = useAuth();
+const toast = useToastStore();
 
 const success = ref(false);
 
@@ -36,7 +38,7 @@ onMounted(async () => {
 
 async function modeChanged() {
   editMode.value = false;
-  success.value = true;
+  toast.showToast('Профиль успешно обновлён!');
   userRaw.value = await useGetUser(user.value.id);
   setTimeout(() => {
     success.value = false;
